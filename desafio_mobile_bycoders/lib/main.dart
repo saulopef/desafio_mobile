@@ -1,4 +1,8 @@
+import 'package:desafio_mobile_bycoders/app/helpers/global_variables.dart';
+import 'package:desafio_mobile_bycoders/app/routes/app_pages.dart';
+import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,59 +12,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Desafio Mobile Flutter',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        primarySwatch: MaterialColor(
+          OneColors.cwbBlue.value,
+          customSwatch(OneColors.cwbBlue),
         ),
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.grey),
+        ),
+        scaffoldBackgroundColor: OneColors.white,
+        accentColor: OneColors.cwbGreen,
+        cardColor: Colors.white,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      getPages: AppPages.pages,
+      initialRoute: Routes.LOGIN,
     );
   }
 }
