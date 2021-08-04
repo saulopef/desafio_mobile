@@ -4,10 +4,15 @@ import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Inicia uma instancia do firebase
   await Firebase.initializeApp();
+  // Inicia uma instancia do DataBase
+  await Hive.initFlutter();
+
   runApp(MyApp());
 }
 
@@ -31,7 +36,7 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.white,
       ),
       getPages: AppPages.pages,
-      initialRoute: Routes.LOGIN,
+      initialRoute: Routes.HOME,
     );
   }
 }
