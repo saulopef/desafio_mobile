@@ -1,10 +1,13 @@
 import 'package:desafio_mobile_bycoders/app/helpers/global_variables.dart';
 import 'package:desafio_mobile_bycoders/app/routes/app_pages.dart';
 import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

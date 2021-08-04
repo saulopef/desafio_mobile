@@ -40,6 +40,9 @@ class LoginPage extends GetView<LoginController> {
 
 List<Widget> childrens() {
   final controller = Get.find<LoginController>();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   return [
     Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -54,6 +57,7 @@ List<Widget> childrens() {
       return TextFormField(
         autofocus: true,
         keyboardType: TextInputType.name,
+        controller: emailController,
         textCapitalization: TextCapitalization.characters,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
@@ -64,21 +68,13 @@ List<Widget> childrens() {
             borderRadius: BorderRadius.circular(3.0),
           ),
         ),
-        validator: (u) {
-          if (u == '') {
-            return 'Prencha o Usuario';
-          } else if (u!.length < 3) {
-            return 'Usuário Invalido';
-          } else {
-            return null;
-          }
-        },
       );
     }),
     OneSapators.medium,
     Obx(() {
       return TextFormField(
         obscureText: controller.obscure.value,
+        controller: passwordController,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
           labelText: 'Senha',
@@ -89,7 +85,7 @@ List<Widget> childrens() {
           ),
           suffixIcon: InkWell(
             onTap: () {
-              controller.obscure.value = !controller.obscure.value;
+              controller.obscure.toggle();
             },
             child: Icon(
               controller.obscure.value ? Icons.visibility_outlined : Icons.visibility_off_outlined,
@@ -97,16 +93,6 @@ List<Widget> childrens() {
             ),
           ),
         ),
-        validator: (s) {
-          /* 
-            if (s.isEmpty || s == "") {
-              return "Prencha a Senha";
-            } else if (s.length < 4) {
-              return "Senha Invalida";
-            } else {
-              return null;
-            } */
-        },
       );
     }),
     OneSapators.medium,
@@ -198,6 +184,7 @@ List<Widget> childrens() {
       child: ElevatedButton(
         onPressed: () {
           HapticFeedback.heavyImpact();
+          controller.login(emailController.text, passwordController.text);
         },
         child: const Text(
           'Fazer Login',

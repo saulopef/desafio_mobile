@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "116876401406",
+    "project_id": "desafio-bycoders-c6281",
+    "storage_bucket": "desafio-bycoders-c6281.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116876401406:android:d408b3732e23767e70a3af",
+        "android_client_info": {
+          "package_name": "br.com.onecorpore.desafio_mobile_bycoders"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116876401406-juibtq39stdp7o0sleoe0eekhfsj78qh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBDs1ublAVN0mllAjozdbq-8g63EDUpJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116876401406-juibtq39stdp7o0sleoe0eekhfsj78qh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "116876401406-u5enb2jgk4kuqkll9ti8skfmcem22bma.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.co.onecorpore"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
