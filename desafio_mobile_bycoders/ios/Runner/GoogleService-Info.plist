@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>116876401406-u5enb2jgk4kuqkll9ti8skfmcem22bma.apps.googleusercontent.com</string>
+	<string>116876401406-dpa9j8hmcdeiufm4if5gf3d8iad9tqki.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.116876401406-u5enb2jgk4kuqkll9ti8skfmcem22bma</string>
+	<string>com.googleusercontent.apps.116876401406-dpa9j8hmcdeiufm4if5gf3d8iad9tqki</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB7500lAe4QXkK4lQZX_1CwR0iKnwXXp-g</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>br.co.onecorpore</string>
+	<string>br.com.onecorpore.desafioMobileBycoders</string>
 	<key>PROJECT_ID</key>
 	<string>desafio-bycoders-c6281</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:116876401406:ios:85ac8c33ba755a6770a3af</string>
+	<string>1:116876401406:ios:7323031526595d5170a3af</string>
 </dict>
 </plist>
