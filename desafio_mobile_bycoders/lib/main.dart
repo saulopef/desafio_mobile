@@ -1,6 +1,10 @@
+import 'package:desafio_mobile_bycoders/app/helpers/global_controller.dart';
 import 'package:desafio_mobile_bycoders/app/helpers/global_variables.dart';
 import 'package:desafio_mobile_bycoders/app/routes/app_pages.dart';
 import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
+import 'package:desafio_mobile_bycoders/initial_route/binding/initial_binding.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,11 +22,16 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver analyticsObs = FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
+    Get.put(GlobalController(analytics, analyticsObs), permanent: true);
     return GetMaterialApp(
       title: 'Desafio Mobile Flutter',
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [analyticsObs],
       theme: ThemeData(
         primarySwatch: MaterialColor(
           OneColors.cwbBlue.value,
@@ -36,6 +45,7 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.white,
       ),
       getPages: AppPages.pages,
+      initialBinding: InitialBinding(),
       initialRoute: Routes.INITIAL,
     );
   }

@@ -1,5 +1,4 @@
 import 'package:desafio_mobile_bycoders/app/helpers/global_variables.dart';
-import 'package:desafio_mobile_bycoders/app/widgets/rouded_icon_buton.dart';
 import 'package:desafio_mobile_bycoders/login/controller/login_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

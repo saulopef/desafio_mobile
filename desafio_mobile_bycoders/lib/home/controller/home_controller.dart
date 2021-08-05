@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:desafio_mobile_bycoders/app/helpers/global_controller.dart';
 import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 
 class HomeController extends GetxController {
+  final globalController = Get.find<GlobalController>();
   // posição da camera, posiciona inicialmente em uma localização qualquer
   //e depois anima a tela para a posição do usuário
   final target = LatLng(37.42796133580664, -122.085749655962).obs;
@@ -48,6 +50,15 @@ class HomeController extends GetxController {
           // em caso de erro informa o usuário com um snackbar
           Get.snackbar("Erro no Serviço de Geolocalização", "Permissão de Localização negada",
               snackPosition: SnackPosition.BOTTOM);
+
+          // Envia evento de erro ao analytics
+          globalController.analytics.logEvent(name: "Home_Render", parameters: {
+            "success": "false",
+            "latitude": "",
+            "longitude": "",
+            "accuracy": "",
+            "error": "Permissão de Localização negada"
+          });
         }
 
         if (permission == LocationPermission.deniedForever) {
@@ -55,6 +66,16 @@ class HomeController extends GetxController {
           Get.snackbar("Erro no Serviço de Geolocalização",
               "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão",
               snackPosition: SnackPosition.BOTTOM);
+
+          // Envia evento de erro ao analytics
+          globalController.analytics.logEvent(name: "Home_Render", parameters: {
+            "success": "false",
+            "latitude": "",
+            "longitude": "",
+            "accuracy": "",
+            "error":
+                "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão"
+          });
         }
       } else {
         Position position = await Geolocator.getCurrentPosition();
@@ -65,6 +86,15 @@ class HomeController extends GetxController {
         box?.put("latitude", position.latitude);
         box?.put("longitude", position.longitude);
         box?.put("accuracy", position.accuracy);
+
+        // Envia evento de erro ao analytics
+        globalController.analytics.logEvent(name: "Home_Render", parameters: {
+          "success": "true",
+          "latitude": position.latitude,
+          "longitude": position.longitude,
+          "accuracy": position.accuracy,
+          "error": ""
+        });
 
         // Anima o mapa para a posição atual do usuário
         goToTarget();
@@ -80,6 +110,15 @@ class HomeController extends GetxController {
           determinePosition();
         },
       );
+
+      // Envia evento de erro ao analytics
+      globalController.analytics.logEvent(name: "Home_Render", parameters: {
+        "success": "false",
+        "latitude": "",
+        "longitude": "",
+        "accuracy": "",
+        "error": "Serviço de Localização desativado"
+      });
     }
   }
 
@@ -104,12 +143,24 @@ class HomeController extends GetxController {
 
   // realiza logout
   void signOut() {
+    final String? email = _auth.currentUser?.email;
+
     try {
       _auth.signOut();
+
+      // Envia evento de sucesso ao analytics
+      globalController.analytics.logEvent(name: "Usuario_Deslogado", parameters: {"user": email});
+
+      // Envia o usuario pra a tela de login
       Get.offAndToNamed(Routes.LOGIN);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Erro de Logout", e.message ?? "Erro ao tentar realizar o logout",
           snackPosition: SnackPosition.BOTTOM);
+      // Envia evento de erro ao analytics
+      globalController.analytics.logEvent(name: "Erro_Logout", parameters: {
+        "user_email": email,
+        "logout_error": e.message ?? "Erro ao tentar realizar o logout"
+      });
     }
   }
 }
