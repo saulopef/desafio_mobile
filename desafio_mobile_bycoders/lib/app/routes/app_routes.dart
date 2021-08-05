@@ -5,6 +5,4 @@ abstract class Routes {
   static const HOME = '/home';
   // ignore: constant_identifier_names
   static const LOGIN = '/login';
-  // ignore: constant_identifier_names
-  static const CADASTRO = '/cadastro';
 }

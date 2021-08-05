@@ -18,8 +18,18 @@ class HomePage extends GetView<HomeController> {
         centerTitle: true,
         actions: [
           RoundIconButton(
+            iconData: Icons.sync,
+            color: Colors.white,
+            onTap: () {
+              controller.goToTarget();
+            },
+          ),
+          RoundIconButton(
             iconData: Icons.logout_rounded,
             color: Colors.white,
+            onTap: () {
+              controller.signOut();
+            },
           )
         ],
       ),

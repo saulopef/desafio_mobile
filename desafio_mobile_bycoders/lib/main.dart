@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.white,
       ),
       getPages: AppPages.pages,
-      initialRoute: Routes.HOME,
+      initialRoute: Routes.INITIAL,
     );
   }
 }

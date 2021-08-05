@@ -56,9 +56,8 @@ List<Widget> childrens() {
 
       return TextFormField(
         autofocus: true,
-        keyboardType: TextInputType.name,
+        keyboardType: TextInputType.emailAddress,
         controller: emailController,
-        textCapitalization: TextCapitalization.characters,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
           labelText: 'Login',

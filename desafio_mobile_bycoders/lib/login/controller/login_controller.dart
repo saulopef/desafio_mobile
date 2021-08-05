@@ -32,6 +32,7 @@ class LoginController extends GetxController {
     try {
       // realiza login
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+
       // se tudo der certo guarda as informações
       box?.put('email', email);
       // então envia o usuario para a tela principal.
@@ -39,15 +40,6 @@ class LoginController extends GetxController {
     } on FirebaseAuthException catch (e) {
       // em caso de erro informa o usuário com um snackbar
       Get.snackbar("Erro de Login", e.message ?? "Erro ao tentar realizar o login",
-          snackPosition: SnackPosition.BOTTOM);
-    }
-  }
-
-  void signOut() {
-    try {
-      _auth.signOut();
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar("Erro de Logout", e.message ?? "Erro ao tentar realizar o logout",
           snackPosition: SnackPosition.BOTTOM);
     }
   }
