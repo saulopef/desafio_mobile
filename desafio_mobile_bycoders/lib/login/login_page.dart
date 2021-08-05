@@ -54,7 +54,6 @@ List<Widget> childrens() {
       final String obj = controller.obj; // mock
 
       return TextFormField(
-        autofocus: true,
         keyboardType: TextInputType.emailAddress,
         controller: emailController,
         decoration: InputDecoration(

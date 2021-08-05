@@ -31,6 +31,7 @@ class LoginController extends GetxController {
   }
 
   void login(String email, String password) async {
+    // FirebaseCrashlytics.instance.crash();
     try {
       // realiza login
       await _auth.signInWithEmailAndPassword(email: email, password: password);

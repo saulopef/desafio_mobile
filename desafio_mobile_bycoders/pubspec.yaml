@@ -20,6 +20,8 @@ dependencies:
   firebase_auth: ^3.0.1
   # dependencia analytics
   firebase_analytics: ^8.2.0
+  # dependencia crashlytics
+  firebase_crashlytics: ^2.1.1
   # banco de dados não relacional (watermelonDB não está disponivel para flutter no momento)
   hive: ^2.0.4
   hive_flutter: ^1.1.0

@@ -6,6 +6,7 @@ import 'package:desafio_mobile_bycoders/initial_route/binding/initial_binding.da
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -14,6 +15,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Inicia uma instancia do firebase
   await Firebase.initializeApp();
+  // Envia todos os uncaught ao Crashlytics.
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   // Inicia uma instancia do DataBase
   await Hive.initFlutter();
 
