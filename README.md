@@ -1,33 +1,51 @@
 # Desafio programação - para vaga desenvolvedor Mobile
-Por favor leiam este documento do começo ao fim, com muita atenção.
-O intuito deste teste é avaliar seus conhecimentos técnicos em desenvolvimento mobile.
-Este desafio deve ser feito por você em sua casa. Gaste o tempo que você quiser, porém normalmente você não deve precisar de mais do que algumas horas para finalizar.
 
-# Instruções de entrega do desafio
-
-1. Primeiro, faça um fork deste projeto para sua conta no Github (crie uma se você não possuir).
-2. Em seguida, implemente o projeto,tal qual descrito abaixo, utilizando sua linguagem de programação mobile preferida em seu clone local.
-3. Por fim, envie via email o projeto ou o fork/link do projeto para seu contato bycoders_.
+By **Saulo Senoski.**
 
 # Descrição do projeto
 
-1. Tela de login usando (email e senha);
-2. Tela home com mapa renderizando um ponto na localização atual do device;
-3. Realizar o login utilizando Firebase Auth;
-4. Armazenar os dados do usuário na store global;
-5. Rastrear login com sucesso e renderização com sucesso com Analytics (enviar um evento com dados considerados primordiais nesses dois casos);
-6. Rastrear os erros e envia-los ao Crashlytics;
-7. Armazenar na base de dados local (preferência por WatermelonDB, mas pode usar outro banco de dados) o usuário logado e sua última posição no mapa;
-8. Testar fluxo de login (unit e e2e);
-9. Testar fluxo da home (unit e e2e).
+ - [x]  Tela de login usando (email e senha);
+ - [x] Tela home com mapa renderizando um ponto na localização atual do device;
+ - [x] Realizar o login utilizando Firebase Auth;
+ - [x] Armazenar os dados do usuário na store global;
+ - [x] Rastrear login com sucesso e renderização com sucesso com Analytics (enviar um evento com dados considerados primordiais nesses dois casos);
+ - [x] Rastrear os erros e envia-los ao Crashlytics;
+ - [x] Armazenar na base de dados local  o usuário logado e sua última posição no mapa; 
 
-# Avaliação
+>  (WatermelonDB não disponível para Flutter, foi então utilizado Hive,
+> DB que apresenta ótima performance e segurança);
 
-Seu projeto será avaliado de acordo com os seguintes critérios.
+ - [x] Testar fluxo de login (unit e e2e);
+ - [x] Testar fluxo da home (unit e e2e).
 
-1. Sua aplicação preenche os requerimentos básicos?
-2. Você documentou a maneira de configurar o ambiente e rodar sua aplicação?
-3. Você seguiu as instruções de envio do desafio?
-4. Qualidade e cobertura dos testes unitários.
+# Usage
 
-Adicionalmente, tentaremos verificar a sua familiarização com as bibliotecas padrões (standard libs), bem como sua experiência com programação orientada a objetos a partir da estrutura de seu projeto.
+ 1. clone este repositório usando
+> `git clone https://github.com/saulopef/desafio_mobile.git`
+
+ 2. Abra a pasta "desafio_mobile_bycoders" na IDE de sua preferencia
+> Testado e aprovado utilizando Visual Studio Code IDE com framework flutter e dart instalados na maquina
+
+ 3. Para rodar a aplicação pressione F5, ou utilize o comando:
+ `Flutter run`
+ 
+ 4. Para executar os testes Unitários, abra a pasta tests e no arquivo **unit_tests.dart** pressione o comando run (logo acima da main).
+![Run Unit Test](https://i.ibb.co/cK5Jsgm/image.png)
+
+ 5. Para executar os Integrations tests use o comando:
+> flutter drive  --driver=test_driver/integration_test_driver.dart  --target=integration_test/app_test.dart
+
+As ações de sucesso ou erro são devidamente enviadas ao Analytics de minha conta pessoal, assim como as exceções serão enviadas ao Crashlytics!
+
+ - Caso deseje gerar uma Exceção para testes
+1. Vá até  `lib>login>controller>login_controller.dart`
+2. Remova o comentário da **linha 34**:
+> // FirebaseCrashlytics.instance.crash();
+> 
+> ====> Deve Ficar assim: <====
+> 
+>  FirebaseCrashlytics.instance.crash();
+>  
+3. A proxima vez que precionar o botão de login, um erro de testes será gerado e o app ira crashar; 
+ 
+*Foram realizadas todas as integrações visando as plataformas **Android** e **IOS**, porem os recursos estão otimizados para Android por conta dos recursos durante este desenvolvimento*
