@@ -6,10 +6,9 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
 class LoginController extends GetxController {
-  final globalController = Get.find<GlobalController>();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Rx<User?> _userCredential = Rx<User?>(null);
+  LoginController(this._auth, this.globalController);
+  final GlobalController globalController;
+  final FirebaseAuth _auth;
 
   Box? box;
 
@@ -26,26 +25,30 @@ class LoginController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    _userCredential.bindStream(_auth.authStateChanges());
+
     box = await Hive.openBox('globalStore');
   }
 
-  void login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     // FirebaseCrashlytics.instance.crash();
     try {
       // realiza login
       await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       // se tudo der certo guarda as informações
-      box?.put('email', email);
-      // Envia evento de sucesso ao analytics
-      globalController.analytics.logLogin();
-      globalController.analytics.logEvent(name: "Usuario_Logado", parameters: {
-        "user_email": _userCredential.value?.email,
-        "user_uid": _userCredential.value?.uid
-      });
+      box?.put('email', _auth.currentUser?.email);
+      box?.put('uid', _auth.currentUser?.uid);
+      if (!Get.testMode) {
+        // Envia evento de sucesso ao analytics
+        globalController.analytics.logLogin();
+        globalController.analytics.logEvent(name: "Usuario_Logado", parameters: {
+          "user_email": _auth.currentUser?.email,
+          "user_uid": _auth.currentUser?.uid
+        });
+      }
       // então envia o usuario para a tela principal.
       Get.offAndToNamed(Routes.HOME);
+      return true;
     } on FirebaseAuthException catch (e) {
       // em caso de erro informa o usuário com um snackbar
       Get.snackbar("Erro de Login", e.message ?? "Erro ao tentar realizar o login",
@@ -55,6 +58,7 @@ class LoginController extends GetxController {
         "user_email": email,
         "login_error": e.message ?? "Erro ao tentar realizar o login"
       });
+      return false;
     }
   }
 }

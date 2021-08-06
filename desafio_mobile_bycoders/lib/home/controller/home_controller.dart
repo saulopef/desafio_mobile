@@ -10,7 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 
 class HomeController extends GetxController {
-  final globalController = Get.find<GlobalController>();
+  HomeController(this._auth, this.globalController);
+  final globalController;
   // posição da camera, posiciona inicialmente em uma localização qualquer
   //e depois anima a tela para a posição do usuário
   final target = LatLng(37.42796133580664, -122.085749655962).obs;
@@ -21,19 +22,24 @@ class HomeController extends GetxController {
   // Marcadores do mapa
   RxSet<Marker> marcadores = Set<Marker>().obs;
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth;
 
   Box? box;
 
   @override
+  void onInit() async {
+    super.onInit();
+    box = await Hive.openBox('globalStore');
+  }
+
+  @override
   void onReady() async {
     super.onReady();
-    box = await Hive.openBox('globalStore');
     determinePosition();
   }
 
   // Busca a posição atual do usuário
-  void determinePosition() async {
+  Future<bool> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -52,13 +58,16 @@ class HomeController extends GetxController {
               snackPosition: SnackPosition.BOTTOM);
 
           // Envia evento de erro ao analytics
-          globalController.analytics.logEvent(name: "Home_Render", parameters: {
-            "success": "false",
-            "latitude": "",
-            "longitude": "",
-            "accuracy": "",
-            "error": "Permissão de Localização negada"
-          });
+          if (!Get.testMode) {
+            globalController.analytics.logEvent(name: "Home_Render", parameters: {
+              "success": "false",
+              "latitude": "",
+              "longitude": "",
+              "accuracy": "",
+              "error": "Permissão de Localização negada"
+            });
+          }
+          return false;
         }
 
         if (permission == LocationPermission.deniedForever) {
@@ -68,15 +77,19 @@ class HomeController extends GetxController {
               snackPosition: SnackPosition.BOTTOM);
 
           // Envia evento de erro ao analytics
-          globalController.analytics.logEvent(name: "Home_Render", parameters: {
-            "success": "false",
-            "latitude": "",
-            "longitude": "",
-            "accuracy": "",
-            "error":
-                "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão"
-          });
+          if (!Get.testMode) {
+            globalController.analytics.logEvent(name: "Home_Render", parameters: {
+              "success": "false",
+              "latitude": "",
+              "longitude": "",
+              "accuracy": "",
+              "error":
+                  "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão"
+            });
+          }
+          return false;
         }
+        return false;
       } else {
         Position position = await Geolocator.getCurrentPosition();
 
@@ -88,16 +101,19 @@ class HomeController extends GetxController {
         box?.put("accuracy", position.accuracy);
 
         // Envia evento de erro ao analytics
-        globalController.analytics.logEvent(name: "Home_Render", parameters: {
-          "success": "true",
-          "latitude": position.latitude,
-          "longitude": position.longitude,
-          "accuracy": position.accuracy,
-          "error": ""
-        });
+        if (!Get.testMode) {
+          globalController.analytics.logEvent(name: "Home_Render", parameters: {
+            "success": "true",
+            "latitude": position.latitude,
+            "longitude": position.longitude,
+            "accuracy": position.accuracy,
+            "error": ""
+          });
+        }
 
         // Anima o mapa para a posição atual do usuário
         goToTarget();
+        return true;
       }
     } else {
       // Em caso de erro informa o usuário com um Dialog que o serviço não está habilitado
@@ -112,13 +128,16 @@ class HomeController extends GetxController {
       );
 
       // Envia evento de erro ao analytics
-      globalController.analytics.logEvent(name: "Home_Render", parameters: {
-        "success": "false",
-        "latitude": "",
-        "longitude": "",
-        "accuracy": "",
-        "error": "Serviço de Localização desativado"
-      });
+      if (!Get.testMode) {
+        globalController.analytics.logEvent(name: "Home_Render", parameters: {
+          "success": "false",
+          "latitude": "",
+          "longitude": "",
+          "accuracy": "",
+          "error": "Serviço de Localização desativado"
+        });
+      }
+      return false;
     }
   }
 
@@ -142,25 +161,30 @@ class HomeController extends GetxController {
   }
 
   // realiza logout
-  void signOut() {
+  Future<bool> signOut() async {
     final String? email = _auth.currentUser?.email;
 
     try {
-      _auth.signOut();
+      await _auth.signOut();
 
-      // Envia evento de sucesso ao analytics
-      globalController.analytics.logEvent(name: "Usuario_Deslogado", parameters: {"user": email});
-
+      if (!Get.testMode) {
+        // Envia evento de sucesso ao analytics
+        globalController.analytics.logEvent(name: "Usuario_Deslogado", parameters: {"user": email});
+      }
       // Envia o usuario pra a tela de login
       Get.offAndToNamed(Routes.LOGIN);
+      return true;
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Erro de Logout", e.message ?? "Erro ao tentar realizar o logout",
           snackPosition: SnackPosition.BOTTOM);
-      // Envia evento de erro ao analytics
-      globalController.analytics.logEvent(name: "Erro_Logout", parameters: {
-        "user_email": email,
-        "logout_error": e.message ?? "Erro ao tentar realizar o logout"
-      });
+      if (!Get.testMode) {
+        // Envia evento de erro ao analytics
+        globalController.analytics.logEvent(name: "Erro_Logout", parameters: {
+          "user_email": email,
+          "logout_error": e.message ?? "Erro ao tentar realizar o logout"
+        });
+      }
+      return false;
     }
   }
 }

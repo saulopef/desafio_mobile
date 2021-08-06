@@ -5,6 +5,7 @@ import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
 import 'package:desafio_mobile_bycoders/initial_route/binding/initial_binding.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +25,12 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver analyticsObs = FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
-    Get.put(GlobalController(analytics, analyticsObs), permanent: true);
+    Get.put(GlobalController(analytics, FirebaseAuth.instance), permanent: true);
     return GetMaterialApp(
       title: 'Desafio Mobile Flutter',
       debugShowCheckedModeBanner: false,

@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class InitialController extends GetxController {
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   void onReady() {
     super.onReady();
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    if (_auth.currentUser == null) {
+    if (auth.currentUser == null) {
       Get.offAndToNamed(Routes.LOGIN);
     } else {
       Get.offAndToNamed(Routes.HOME);
