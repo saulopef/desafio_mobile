@@ -14,14 +14,19 @@ import 'package:hive_flutter/adapters.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await configApp();
+  runApp(MyApp());
+}
+
+Future<void> configApp() async {
   // Inicia uma instancia do firebase
   await Firebase.initializeApp();
   // Envia todos os uncaught ao Crashlytics.
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  if (!Get.testMode) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  }
   // Inicia uma instancia do DataBase
   await Hive.initFlutter();
-
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -9,6 +9,7 @@ class LoginController extends GetxController {
   LoginController(this._auth, this.globalController);
   final GlobalController globalController;
   final FirebaseAuth _auth;
+  final RxBool isLoading = false.obs;
 
   Box? box;
 
@@ -31,6 +32,7 @@ class LoginController extends GetxController {
 
   Future<bool> login(String email, String password) async {
     // FirebaseCrashlytics.instance.crash();
+    isLoading.value = true;
     try {
       // realiza login
       await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -46,18 +48,23 @@ class LoginController extends GetxController {
           "user_uid": _auth.currentUser?.uid
         });
       }
+      isLoading.value = false;
       // então envia o usuario para a tela principal.
       Get.offAndToNamed(Routes.HOME);
+      isLoading.value = false;
       return true;
     } on FirebaseAuthException catch (e) {
       // em caso de erro informa o usuário com um snackbar
       Get.snackbar("Erro de Login", e.message ?? "Erro ao tentar realizar o login",
           snackPosition: SnackPosition.BOTTOM);
-      // Envia evento de erro ao analytics
-      globalController.analytics.logEvent(name: "Erro_Login", parameters: {
-        "user_email": email,
-        "login_error": e.message ?? "Erro ao tentar realizar o login"
-      });
+      if (!Get.testMode) {
+        // Envia evento de erro ao analytics
+        globalController.analytics.logEvent(name: "Erro_Login", parameters: {
+          "user_email": email,
+          "login_error": e.message ?? "Erro ao tentar realizar o login"
+        });
+      }
+      isLoading.value = false;
       return false;
     }
   }

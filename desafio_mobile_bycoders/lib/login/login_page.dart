@@ -54,11 +54,12 @@ List<Widget> childrens() {
       final String obj = controller.obj; // mock
 
       return TextFormField(
+        key: Key('email'),
         keyboardType: TextInputType.emailAddress,
         controller: emailController,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-          labelText: 'Login',
+          labelText: 'email',
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -70,6 +71,7 @@ List<Widget> childrens() {
     OneSapators.medium,
     Obx(() {
       return TextFormField(
+        key: Key('senha'),
         obscureText: controller.obscure.value,
         controller: passwordController,
         decoration: InputDecoration(
@@ -176,18 +178,25 @@ List<Widget> childrens() {
     ),
     const SizedBox(height: 16),
     Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      width: GetPlatform.isMobile ? Get.width : Get.width / 3,
-      child: ElevatedButton(
-        onPressed: () {
-          HapticFeedback.heavyImpact();
-          controller.login(emailController.text, passwordController.text);
-        },
-        child: const Text(
-          'Fazer Login',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    )
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        width: GetPlatform.isMobile ? Get.width : Get.width / 3,
+        child: Obx(
+          () => ElevatedButton(
+            onPressed: () {
+              HapticFeedback.heavyImpact();
+              controller.login(emailController.text, passwordController.text);
+            },
+            child: controller.isLoading.value
+                ? Container(
+                    height: 30,
+                    width: 30,
+                    child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                : const Text(
+                    'Fazer Login',
+                    style: TextStyle(color: Colors.white),
+                  ),
+          ),
+        ))
   ];
 }

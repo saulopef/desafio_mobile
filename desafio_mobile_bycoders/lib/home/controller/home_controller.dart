@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:desafio_mobile_bycoders/app/helpers/global_controller.dart';
 import 'package:desafio_mobile_bycoders/app/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,7 +34,9 @@ class HomeController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    determinePosition();
+    if (!Get.testMode) {
+      determinePosition();
+    }
   }
 
   // Busca a posição atual do usuário
@@ -47,74 +48,81 @@ class HomeController extends GetxController {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (serviceEnabled) {
       // Verifica se foi concedida permissão de geolocalização
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        // Se for negado, solicita novamente
-        permission = await Geolocator.requestPermission();
-
+      if (!Get.testMode) {
+        permission = await Geolocator.checkPermission();
         if (permission == LocationPermission.denied) {
-          // em caso de erro informa o usuário com um snackbar
-          Get.snackbar("Erro no Serviço de Geolocalização", "Permissão de Localização negada",
-              snackPosition: SnackPosition.BOTTOM);
+          // Se for negado, solicita novamente
+          permission = await Geolocator.requestPermission();
+
+          if (permission == LocationPermission.denied) {
+            // em caso de erro informa o usuário com um snackbar
+            Get.snackbar("Erro no Serviço de Geolocalização", "Permissão de Localização negada",
+                snackPosition: SnackPosition.BOTTOM);
+
+            // Envia evento de erro ao analytics
+            if (!Get.testMode) {
+              globalController.analytics.logEvent(name: "Home_Render", parameters: {
+                "success": "false",
+                "latitude": "",
+                "longitude": "",
+                "accuracy": "",
+                "error": "Permissão de Localização negada"
+              });
+            }
+            return false;
+          }
+
+          if (permission == LocationPermission.deniedForever) {
+            // em caso de erro informa o usuário com um snackbar
+            Get.snackbar("Erro no Serviço de Geolocalização",
+                "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão",
+                snackPosition: SnackPosition.BOTTOM);
+
+            // Envia evento de erro ao analytics
+            if (!Get.testMode) {
+              globalController.analytics.logEvent(name: "Home_Render", parameters: {
+                "success": "false",
+                "latitude": "",
+                "longitude": "",
+                "accuracy": "",
+                "error":
+                    "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão"
+              });
+            }
+            return false;
+          }
+
+          if (permission == LocationPermission.whileInUse) {
+            determinePosition();
+          }
+          return false;
+        } else {
+          Position position = await Geolocator.getCurrentPosition();
+
+          target.value = LatLng(position.latitude, position.longitude);
+
+          // Salva a posição atual do usuario
+          box?.put("latitude", position.latitude);
+          box?.put("longitude", position.longitude);
+          box?.put("accuracy", position.accuracy);
 
           // Envia evento de erro ao analytics
           if (!Get.testMode) {
             globalController.analytics.logEvent(name: "Home_Render", parameters: {
-              "success": "false",
-              "latitude": "",
-              "longitude": "",
-              "accuracy": "",
-              "error": "Permissão de Localização negada"
+              "success": "true",
+              "latitude": position.latitude,
+              "longitude": position.longitude,
+              "accuracy": position.accuracy,
+              "error": ""
             });
           }
-          return false;
-        }
-
-        if (permission == LocationPermission.deniedForever) {
-          // em caso de erro informa o usuário com um snackbar
-          Get.snackbar("Erro no Serviço de Geolocalização",
-              "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão",
-              snackPosition: SnackPosition.BOTTOM);
-
-          // Envia evento de erro ao analytics
-          if (!Get.testMode) {
-            globalController.analytics.logEvent(name: "Home_Render", parameters: {
-              "success": "false",
-              "latitude": "",
-              "longitude": "",
-              "accuracy": "",
-              "error":
-                  "Permissão de Localização permanentemente negada, não podemos solicitar nova permissão"
-            });
-          }
-          return false;
-        }
-        return false;
-      } else {
-        Position position = await Geolocator.getCurrentPosition();
-
-        target.value = LatLng(position.latitude, position.longitude);
-
-        // Salva a posição atual do usuario
-        box?.put("latitude", position.latitude);
-        box?.put("longitude", position.longitude);
-        box?.put("accuracy", position.accuracy);
-
-        // Envia evento de erro ao analytics
-        if (!Get.testMode) {
-          globalController.analytics.logEvent(name: "Home_Render", parameters: {
-            "success": "true",
-            "latitude": position.latitude,
-            "longitude": position.longitude,
-            "accuracy": position.accuracy,
-            "error": ""
-          });
         }
 
         // Anima o mapa para a posição atual do usuário
         goToTarget();
         return true;
       }
+      return false;
     } else {
       // Em caso de erro informa o usuário com um Dialog que o serviço não está habilitado
       Get.defaultDialog(

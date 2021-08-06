@@ -7,6 +7,7 @@ class LoginBinding implements Bindings {
   @override
   void dependencies() {
     Get.lazyPut<LoginController>(
-        () => LoginController(FirebaseAuth.instance, Get.find<GlobalController>()));
+        () => LoginController(FirebaseAuth.instance, Get.find<GlobalController>()),
+        fenix: true);
   }
 }

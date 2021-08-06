@@ -68,7 +68,7 @@ main() async {
       expect(result, true);
     });
     test('return position from database', () async {
-      final result = await homeController.determinePosition();
+      await homeController.determinePosition();
 
       expect(homeController.box, isNotNull);
       expect(homeController.box?.get("latitude"), mockPosition.latitude);

@@ -42,6 +42,9 @@ dev_dependencies:
   # mock para test
   mockito: ^5.0.13
   firebase_auth_mocks: ^0.8.0
+  # Testes de integração
+  integration_test:
+    sdk: flutter
 
 flutter:
 
