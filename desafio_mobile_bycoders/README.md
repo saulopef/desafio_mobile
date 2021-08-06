@@ -1,16 +1,51 @@
-# desafio_mobile_bycoders
+# Desafio programação - para vaga desenvolvedor Mobile
 
-A new Flutter project.
+By **Saulo Senoski.**
 
-## Getting Started
+# Descrição do projeto
 
-This project is a starting point for a Flutter application.
+ - [x]  Tela de login usando (email e senha);
+ - [x] Tela home com mapa renderizando um ponto na localização atual do device;
+ - [x] Realizar o login utilizando Firebase Auth;
+ - [x] Armazenar os dados do usuário na store global;
+ - [x] Rastrear login com sucesso e renderização com sucesso com Analytics (enviar um evento com dados considerados primordiais nesses dois casos);
+ - [x] Rastrear os erros e envia-los ao Crashlytics;
+ - [x] Armazenar na base de dados local  o usuário logado e sua última posição no mapa; 
 
-A few resources to get you started if this is your first Flutter project:
+>  (WatermelonDB não disponível para Flutter, foi então utilizado Hive,
+> DB que apresenta ótima performance e segurança);
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+ - [x] Testar fluxo de login (unit e e2e);
+ - [x] Testar fluxo da home (unit e e2e).
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Usage
+
+ 1. clone este repositório usando
+> `git clone https://github.com/saulopef/desafio_mobile.git`
+
+ 2. Abra a pasta "desafio_mobile_bycoders" na IDE de sua preferencia
+> Testado e aprovado utilizando Visual Studio Code IDE com framework flutter e dart instalados na maquina
+
+ 3. Para rodar a aplicação pressione F5, ou utilize o comando:
+ `Flutter run`
+ 
+ 4. Para executar os testes Unitários, abra a pasta tests e no arquivo **unit_tests.dart** pressione o comando run (logo acima da main).
+![Run Unit Test](https://i.ibb.co/cK5Jsgm/image.png)
+
+ 5. Para executar os Integrations tests use o comando:
+> flutter drive  --driver=test_driver/integration_test_driver.dart  --target=integration_test/app_test.dart
+
+As ações de sucesso ou erro são devidamente enviadas ao Analytics de minha conta pessoal, assim como as exceções serão enviadas ao Crashlytics!
+
+ - Caso deseje gerar uma Exceção para testes
+1. Vá até  `lib>login>controller>login_controller.dart`
+2. Remova o comentário da **linha 34**:
+> // FirebaseCrashlytics.instance.crash();
+> 
+> ====> Deve Ficar assim: <====
+> 
+>  FirebaseCrashlytics.instance.crash();
+>  
+3. A proxima vez que precionar o botão de login, um erro de testes será gerado e o app ira crashar; 
+ 
+*Foram realizadas todas as integrações visando as plataformas **Android** e **IOS**, porem os recursos estão otimizados para Android por conta dos recursos durante este desenvolvimento*
