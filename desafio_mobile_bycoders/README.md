@@ -1,3 +1,4 @@
+
 # Desafio programação - para vaga desenvolvedor Mobile
 
 By **Saulo Senoski.**
@@ -28,11 +29,18 @@ By **Saulo Senoski.**
 
  3. Para rodar a aplicação pressione F5, ou utilize o comando:
  `Flutter run`
+
+# Usuários de Testes:
+
+> email: bycoders@testemobile.com | senha: 123456
+> email: usuariobycoder@teste.com | senha: 654321
+
+ # Unit testing and e2e
  
- 4. Para executar os testes Unitários, abra a pasta tests e no arquivo **unit_tests.dart** pressione o comando run (logo acima da main).
+ 1. Para executar os testes Unitários, abra a pasta tests e no arquivo **unit_tests.dart** pressione o comando run (logo acima da main).
 ![Run Unit Test](https://i.ibb.co/cK5Jsgm/image.png)
 
- 5. Para executar os Integrations tests use o comando:
+ 2. Para executar os Integrations tests use o comando:
 > flutter drive  --driver=test_driver/integration_test_driver.dart  --target=integration_test/app_test.dart
 
 As ações de sucesso ou erro são devidamente enviadas ao Analytics de minha conta pessoal, assim como as exceções serão enviadas ao Crashlytics!
